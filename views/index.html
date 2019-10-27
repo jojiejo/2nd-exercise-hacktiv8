@@ -1,0 +1,60 @@
+{{define "index"}}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="refresh" CONTENT="16">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body style="background-color:#FBFBFB;">
+        <div class="container" style="margin-top:50px; border:1px solid #cecece; padding:30px 30px 50px 30px; background-color:#FFFFFF;">
+            <h2>Keadaan Air & Angin</h2><br />
+            <div class="row">
+                <div class="col-sm">
+                    {{ $waterClass := "" }}
+                    {{ $waterStatus := "" }}
+                    {{ $waterPercentage := .Status.Water }}
+                    <p>Air: {{.Status.Water}} m</p>
+                    
+                    {{if lt .Status.Water 5}}
+                    {{ $waterStatus = "Aman" }}
+                    {{ $waterClass = "bg-success" }}
+                    {{else if and (ge .Status.Water 5) (le .Status.Water 8)}}
+                    {{ $waterStatus = "Siaga" }}
+                    {{ $waterClass = "bg-warning" }}
+                    {{else if gt .Status.Water 8}}
+                    {{ $waterStatus = "Bahaya" }}
+                    {{ $waterClass = "bg-danger" }}
+                    {{end}}
+
+                    <div class="progress">
+                        <div class="progress-bar {{$waterClass}}" role="progressbar" style="width: {{percentage .Status.Water 10}}%" aria-valuenow="{{percentage .Status.Water 10}}" aria-valuemin="0" aria-valuemax="10">{{$waterStatus}}</div>
+                    </div>
+                </div>
+
+                <div class="col-sm">
+                    {{ $windClass := "" }}
+                    {{ $windStatus := "" }}
+                    <p>Angin: {{.Status.Wind}} m/s</p>
+
+                    
+                    {{if lt .Status.Wind 6}}
+                    {{ $windStatus = "Aman" }}
+                    {{ $windClass = "bg-success" }}
+                    {{else if and (ge .Status.Wind 6) (le .Status.Wind 15)}}
+                    {{ $windStatus = "Siaga" }}
+                    {{ $windClass = "bg-warning" }}
+                    {{else if gt .Status.Wind 15}}
+                    {{ $windStatus = "Bahaya" }}
+                    {{ $windClass = "bg-danger" }}
+                    {{end}}
+
+                    <div class="progress">
+                        <div class="progress-bar {{$windClass}}" role="progressbar" style="width: {{percentage .Status.Wind 20}}%" aria-valuenow="{{percentage .Status.Wind 20}}" aria-valuemin="0" aria-valuemax="20">{{$windStatus}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+{{end}}
+
